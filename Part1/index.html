@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS Inventory Management System - PROG2005 Part1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory Management System</h1>
+        <!-- Operation panel -->
+        <div class="control-panel">
+            <div class="form-group">
+                <label>Item ID (Unique):</label>
+                <input type="text" id="itemId" placeholder="e.g. E001">
+            </div>
+            <div class="form-group">
+                <label>Item Name:</label>
+                <input type="text" id="itemName" placeholder="e.g. Laptop">
+            </div>
+            <div class="form-group">
+                <label>Category:</label>
+                <select id="category">
+                    <option value="Electronics">Electronics</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Tools">Tools</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" id="quantity" min="0" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Price ($):</label>
+                <input type="number" id="price" min="0" step="0.01" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Supplier Name:</label>
+                <input type="text" id="supplier" placeholder="e.g. Harvey Norman">
+            </div>
+            <div class="form-group">
+                <label>Stock Status:</label>
+                <select id="stockStatus">
+                    <option value="In Stock">In Stock</option>
+                    <option value="Low Stock">Low Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Popular Item:</label>
+                <select id="popular">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Comment (Optional):</label>
+                <textarea id="comment" placeholder="Add comment..."></textarea>
+            </div>
+            <!-- Add, Delete, and Modify Buttons -->
+            <div class="button-group">
+                <button id="addBtn">Add Item</button>
+                <button id="editBtn">Edit Item (by Name)</button>
+                <button id="deleteBtn">Delete Item (by Name)</button>
+            </div>
+            <!-- Search/Filter Button -->
+            <div class="search-group">
+                <input type="text" id="searchInput" placeholder="Search by Name...">
+                <button id="searchBtn">Search</button>
+                <button id="showAllBtn">Show All</button>
+                <button id="showPopularBtn">Show Popular</button>
+            </div>
+        </div>
+        <!-- Operation Feedback Area -->
+        <div id="feedback"></div>
+        <!-- Inventory Data Display Table -->
+        <div class="table-container">
+            <table id="inventoryTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Supplier</th>
+                        <th>Stock Status</th>
+                        <th>Popular</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Core business logic JS -->
+    <script>
+        let inventory = [
+            {
+                itemId: 'E001',
+                itemName: 'MacBook Pro',
+                category: 'Electronics',
+                quantity: 10,
+                price: 2499.99,
+                supplierName: 'Harvey Norman',
+                stockStatus: 'In Stock',
+                isPopular: 'Yes',
+                comment: '16-inch M3 Pro'
+            }
+        ];
+
+        const $ = (id) => document.getElementById(id);
+
+        const showFeedback = (message, isSuccess) => {
+            const feedback = $('feedback');
+            feedback.textContent = message;
+            feedback.className = isSuccess ? 'success' : 'error';
+            setTimeout(() => feedback.className = '', 3000);
+        };
+
+        //Render inventory table to the page
+        const renderInventory = (items) => {
+            const tbody = $('inventoryBody');
+            tbody.innerHTML = '';
+            if (items.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="9" style="text-align: center; padding: 20px;">No items in inventory</td>';
+                tbody.appendChild(row);
+                return;
+            }
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.itemId}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>${item.supplierName}</td>
+                    <td>${item.stockStatus}</td>
+                    <td>${item.isPopular}</td>
+                    <td>${item.comment || 'N/A'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        };
+
+        //从表单获取数据
+        const getFormData = () => ({
+            itemId: $('itemId').value.trim(),
+            itemName: $('itemName').value.trim(),
+            category: $('category').value,
+            quantity: Number($('quantity').value),
+            price: Number($('price').value),
+            supplierName: $('supplier').value.trim(),
+            stockStatus: $('stockStatus').value,
+            isPopular: $('popular').value,
+            comment: $('comment').value.trim() || undefined
+        });
+
+        //Reset form input fields
+        const resetForm = () => {
+            $('itemId').value = '';
+            $('itemName').value = '';
+            $('quantity').value = '';
+            $('price').value = '';
+            $('supplier').value = '';
+            $('comment').value = '';
+            $('searchInput').value = '';
+        };
+
+        const validateItem = (item, isEdit = false) => {
+            if (!item.itemId || !item.itemName || !item.supplierName || isNaN(item.quantity) || isNaN(item.price)) {
+                showFeedback('Error: All fields except Comment are required! (Qty/Price must be numbers)', false);
+                return false;
+            }
+            if (item.quantity < 0 || item.price < 0) {
+                showFeedback('Error: Quantity and Price must be non-negative!', false);
+                return false;
+            }
+            if (!isEdit && inventory.some(i => i.itemId === item.itemId)) {
+                showFeedback(`Error: Item ID ${item.itemId} already exists!`, false);
+                return false;
+            }
+            return true;
+        };
+
+        //Bind button click event
+        //Add Product
+        $('addBtn').addEventListener('click', () => {
+            const newItem = getFormData();
+            if (!validateItem(newItem)) return;
+            inventory.push(newItem);
+            renderInventory(inventory);
+            resetForm();
+            showFeedback(`Success: Item ${newItem.itemName} added!`, true);
+        });
+
+        //Edit Product (by Product Name)
+        $('editBtn').addEventListener('click', () => {
+            const editData = getFormData();
+            if (!validateItem(editData, true)) return;
+            const itemIndex = inventory.findIndex(i => i.itemName === editData.itemName);
+            if (itemIndex === -1) {
+                showFeedback(`Error: Item ${editData.itemName} not found!`, false);
+                return;
+            }
+            //Retain original ID
+            editData.itemId = inventory[itemIndex].itemId;
+            inventory[itemIndex] = editData;
+            renderInventory(inventory);
+            resetForm();
+            showFeedback(`Success: Item ${editData.itemName} updated!`, true);
+        });
+
+        //Delete product (by name, confirm prompt)
+        $('deleteBtn').addEventListener('click', () => {
+            const itemName = $('itemName').value.trim();
+            if (!itemName) {
+                showFeedback('Error: Enter Item Name to delete!', false);
+                return;
+            }
+            //Confirmation prompt
+            if (confirm(`Are you sure you want to delete "${itemName}"?`)) {
+                const originalLength = inventory.length;
+                inventory = inventory.filter(i => i.itemName !== itemName);
+                //Verification
+                if (inventory.length === originalLength) {
+                    showFeedback(`Error: Item ${itemName} not found!`, false);
+                    return;
+                }
+                renderInventory(inventory);
+                resetForm();
+                showFeedback(`Success: Item ${itemName} deleted!`, true);
+            }
+        });
+
+        //Search products by name
+        $('searchBtn').addEventListener('click', () => {
+            const searchTerm = $('searchInput').value.trim().toLowerCase();
+            if (!searchTerm) {
+                showFeedback('Error: Enter a search term!', false);
+                return;
+            }
+            const searchResults = inventory.filter(i => i.itemName.toLowerCase().includes(searchTerm));
+            renderInventory(searchResults);
+            showFeedback(`Found ${searchResults.length} item(s) matching "${searchTerm}"`, true);
+        });
+
+        //Show all products
+        $('showAllBtn').addEventListener('click', () => {
+            renderInventory(inventory);
+            resetForm();
+            showFeedback('Showing all inventory items', true);
+        });
+
+        //Show all popular products
+        $('showPopularBtn').addEventListener('click', () => {
+            const popularItems = inventory.filter(i => i.isPopular === 'Yes');
+            renderInventory(popularItems);
+            showFeedback(`Showing ${popularItems.length} popular item(s)`, true);
+        });
+
+        //Render initial data after the page has finished loading
+        window.onload = () => renderInventory(inventory);
+    </script>
+</body>
+</html>
