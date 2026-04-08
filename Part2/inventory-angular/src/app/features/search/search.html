@@ -30,6 +30,6 @@
   </table>
 </div>
 
-<div *ngIf="results.length === 0">
+<div *ngIf="results.length === 0 && searchForm.value.keyword">
   <p>No items found</p>
 </div>
