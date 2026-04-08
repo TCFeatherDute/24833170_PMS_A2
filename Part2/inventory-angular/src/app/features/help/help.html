@@ -1,18 +1,66 @@
-<h1>{{ title }}</h1>
+<div class="help-page">
+  <div class="card">
+    <h1>Help & User Guide</h1>
+    <p>Inventory Management System | PROG2005 Assignment 2</p>
+  </div>
 
-<div class="faq">
-  <h3>How to add an item?</h3>
-  <p>Fill all required fields and click Add Item.</p>
+  <div class="card">
+    <h2>About This System</h2>
+    <p>This inventory management system is designed to help users manage product information easily.
+      You can add, edit, delete, search and view products. All data is stored locally in the browser
+      and will not be uploaded to any server.</p>
+  </div>
 
-  <h3>Why can’t I add an item?</h3>
-  <p>Item ID must be unique. All required fields must be filled.</p>
+  <div class="card">
+    <h2>How to Add an Item</h2>
+    <p>1. Go to the <strong>Inventory</strong> page</p>
+    <p>2. Fill in all required fields: Item ID, Item Name, Supplier Name</p>
+    <p>3. Quantity and Price are set to 0 by default, you can change them</p>
+    <p>4. Category, Stock Status and Popular can be selected directly</p>
+    <p>5. Comment is optional, you can leave it empty</p>
+    <p>6. Click <strong>Add Item</strong> to save</p>
+  </div>
 
-  <h3>How to edit an item?</h3>
-  <p>Enter the item name, modify the details, then click Edit.</p>
+  <div class="card">
+    <h2>How to Edit an Item</h2>
+    <p>1. Enter the <strong>Item Name</strong> of the product you want to modify</p>
+    <p>2. Change the information you want to update</p>
+    <p>3. Click <strong>Edit Item</strong></p>
+    <p>4. The system will update the item matching the name</p>
+  </div>
 
-  <h3>How to delete an item?</h3>
-  <p>Enter the item name and click Delete. Confirm when prompted.</p>
+  <div class="card">
+    <h2>How to Delete an Item</h2>
+    <p>1. Enter the <strong>Item Name</strong> of the product you want to delete</p>
+    <p>2. Click <strong>Delete Item</strong></p>
+    <p>3. Confirm the deletion in the pop-up window</p>
+    <p>4. The item will be removed permanently</p>
+  </div>
 
-  <h3>How to search items?</h3>
-  <p>Enter a keyword in the search box and click Search.</p>
+  <div class="card">
+    <h2>How to Search Items</h2>
+    <p>1. Go to the <strong>Search</strong> page</p>
+    <p>2. Enter any keyword in the search box</p>
+    <p>3. Click <strong>Search</strong> to find matching items</p>
+    <p>4. Click <strong>Popular Items</strong> to view popular products</p>
+  </div>
+
+  <div class="card">
+    <h2>Common Error Explanations</h2>
+    <p><strong>"All fields except Comment are required!"</strong><br>
+    → Item ID, Item Name, Supplier Name cannot be empty.</p>
+    <p><strong>"Item ID already exists!"</strong><br>
+    → This ID has been used, please use a new unique ID.</p>
+    <p><strong>"Item not found"</strong><br>
+    → The item name you entered does not exist in the system.</p>
+  </div>
+
+  <div class="card">
+    <h2>Notes</h2>
+    <p>• All data is temporary and stored only in the service</p>
+    <p>• Refreshing the page will restore the default 20 items</p>
+    <p>• Item ID must be unique to avoid conflict</p>
+    <p>• All forms support real‑time input and immediate operation</p>
+    <p>• The interface is responsive and user‑friendly</p>
+  </div>
 </div>

@@ -1,4 +1,39 @@
-h1 { color: #2c3e50; }
-.faq { margin-top: 1rem; }
-h3 { margin-top: 1.2rem; color: #2c3e50; }
-p { margin: 0.3rem 0 1rem 0; line-height: 1.6; }
+.help-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.card {
+  background: #fff;
+  padding: 1.6rem;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  border-left: 5px solid #3498db;
+}
+
+.card h1 {
+  text-align: center;
+  margin: 0 0 0.4rem;
+  color: #2c3e50;
+}
+
+.card h2 {
+  margin: 0 0 0.8rem;
+  color: #2980b9;
+  font-size: 1.3rem;
+}
+
+.card p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
