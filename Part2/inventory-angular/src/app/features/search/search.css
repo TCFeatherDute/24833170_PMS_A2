@@ -1,34 +1,113 @@
-.search-box {
+.search-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.search-page h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.search-form {
   display: flex;
-  gap: 0.5rem;
-  margin: 1rem 0;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-input {
-  padding: 6px;
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  outline: none;
+  transition: 0.3s;
 }
 
-button {
-  padding: 6px 12px;
+.search-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.25);
+}
+
+.btn-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 0.8rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
   background: #2c3e50;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #3a536b;
+  transform: translateY(-2px);
+}
+
+.results h3 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
 }
 
-td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
+th {
+  background: #3498db;
+  color: white;
+  padding: 1rem;
   text-align: left;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+  background: #f7faff;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #777;
+  margin-top: 2rem;
 }

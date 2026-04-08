@@ -1,35 +1,45 @@
-<h1>Search Inventory</h1>
+<div class="search-page">
+  <h1>🔍 Search Items</h1>
 
-<form [formGroup]="searchForm">
-  <div class="search-box">
-    <input formControlName="keyword" placeholder="Search by item name...">
-    <button (click)="search()">Search</button>
-    <button (click)="showPopular()">Show Popular</button>
+  <form [formGroup]="searchForm" class="search-form">
+    <input 
+      formControlName="keyword" 
+      placeholder="Enter product name..."
+      class="search-input"
+    >
+    <div class="btn-group">
+      <button class="btn-primary" (click)="search()">Search</button>
+      <button class="btn-secondary" (click)="showPopular()">Popular Items</button>
+    </div>
+  </form>
+
+  <div class="results" *ngIf="results.length > 0">
+    <h3>Found: {{ results.length }} item(s)</h3>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of results">
+            <td>{{ item.itemId }}</td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.category }}</td>
+            <td>${{ item.price.toFixed(2) }}</td>
+            <td>{{ item.stockStatus }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</form>
 
-<div *ngIf="results.length > 0">
-  <h3>Found: {{ results.length }} item(s)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of results">
-        <td>{{ item.itemId }}</td>
-        <td>{{ item.itemName }}</td>
-        <td>{{ item.category }}</td>
-        <td>${{ item.price.toFixed(2) }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div *ngIf="results.length === 0 && searchForm.value.keyword">
-  <p>No items found</p>
+  <div class="no-results" *ngIf="results.length === 0 && searchForm.value.keyword">
+    <p>❌ No matching items found</p>
+  </div>
 </div>
