@@ -1,0 +1,104 @@
+<h1>Inventory Management System</h1>
+
+<form [formGroup]="form">
+<div class="control-panel">
+  <div class="form-group">
+    <label>Item ID (Unique):</label>
+    <input formControlName="itemId" type="text" placeholder="e.g. E001">
+  </div>
+  <div class="form-group">
+    <label>Item Name:</label>
+    <input formControlName="itemName" type="text" placeholder="e.g. Laptop">
+  </div>
+  <div class="form-group">
+    <label>Category:</label>
+    <select formControlName="category">
+      <option value="Electronics">Electronics</option>
+      <option value="Furniture">Furniture</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Tools">Tools</option>
+      <option value="Miscellaneous">Miscellaneous</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Quantity:</label>
+    <input formControlName="quantity" type="number" min="0">
+  </div>
+  <div class="form-group">
+    <label>Price ($):</label>
+    <input formControlName="price" type="number" min="0" step="0.01">
+  </div>
+  <div class="form-group">
+    <label>Supplier Name:</label>
+    <input formControlName="supplierName" type="text">
+  </div>
+  <div class="form-group">
+    <label>Stock Status:</label>
+    <select formControlName="stockStatus">
+      <option value="In Stock">In Stock</option>
+      <option value="Low Stock">Low Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Popular Item:</label>
+    <select formControlName="isPopular">
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Comment (Optional):</label>
+    <textarea formControlName="comment"></textarea>
+  </div>
+</div>
+
+<div class="button-group">
+  <button (click)="addItem()">Add Item</button>
+  <button (click)="editItem()">Edit Item (by Name)</button>
+  <button (click)="deleteItem()">Delete Item (by Name)</button>
+</div>
+
+<div class="search-group">
+  <input formControlName="searchTerm" placeholder="Search by Name...">
+  <button (click)="search()">Search</button>
+  <button (click)="loadAll()">Show All</button>
+  <button (click)="showPopular()">Show Popular</button>
+</div>
+
+<div id="feedback" [class]="feedbackClass">{{ feedback }}</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Supplier</th>
+        <th>Stock Status</th>
+        <th>Popular</th>
+        <th>Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="items.length === 0">
+        <td colspan="9" style="text-align:center;padding:20px;">No items in inventory</td>
+      </tr>
+      <tr *ngFor="let item of items">
+        <td>{{ item.itemId }}</td>
+        <td>{{ item.itemName }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>${{ item.price.toFixed(2) }}</td>
+        <td>{{ item.supplierName }}</td>
+        <td>{{ item.stockStatus }}</td>
+        <td>{{ item.isPopular }}</td>
+        <td>{{ item.comment || 'N/A' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</form>
